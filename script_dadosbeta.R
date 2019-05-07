@@ -438,12 +438,12 @@ dec <- dec %>%
 
 gabi<-function(string){
   ifelse(string>1000000, 
-         (paste0(round(string/1000000,0),".",round(string/1000000,0)*1000-round(string/1000,0),".", substr(round(string,0), start = nchar(round(string,0))- 2, stop = nchar(round(string,0))),
-           ifelse(round(string,2)==round(string,0),"",
+         (paste0(floor(string/1000000),".",floor(string/1000)-floor(string/1000000)*1000,".", substr(floor(string), start = nchar(floor(string))- 2, stop = nchar(floor(string))),
+           ifelse(round(string,2)==floor(string),"",
                   paste0(",",substr(1 + round(string,2)-round(string,0),start = 3, stop = 4))))),
-    (paste0(round(string/1000,0),".", substr(round(string,0), start = nchar(round(string,0))- 2, stop = nchar(round(string,0))),
+    (paste0(floor(string/1000),".", substr(floor(string), start = nchar(floor(string))- 2, stop = nchar(floor(string))),
          ifelse(round(string,2)==round(string,0),"",
-                paste0(",",substr(1 + round(string,2)-round(string,0),start = 3, stop = 4))))))
+                paste0(",",substr(1 + round(string,2)-floor(string),start = 3, stop = 4))))))
 }
 
 

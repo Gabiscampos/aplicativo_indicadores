@@ -1,4 +1,4 @@
-﻿
+
 # Shiny (BETA) dos indicadores CepespData
 # Autor: Rebeca Carvalho
 
@@ -30,7 +30,7 @@ library(DT)
 
 # 1. Data ----------------------------------------------------------------
 
-source("script_dadosbeta.R", encoding = "UTF-8")
+source("script_dadosbeta.R", encoding = "UTF-8", local = TRUE)
 
 # 2. User interface -------------------------------------------------------
 
