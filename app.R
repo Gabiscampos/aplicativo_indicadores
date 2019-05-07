@@ -224,7 +224,7 @@ server <- function(input, output,session){
                    Os indicadores eleitorais são uma iniciativa de disseminar análise de dados eleitorais. 
                    Os indicadores aqui calculados foram inspirados pelo livro 'Votos e Partidos - Almanaque de Dados Eleitorais' 
                    de Wanderley Guilherme dos Santos. Todos os indicadores foram calculados a partir dos dados do 
-                   <a href='http://cepesp.io/'> CepespData </a>. Desenvolvido pela equipe CEPESP. </font>")
+                   <a href='http://cepesp.io/'> CepespData </a>. Desenvolvido por Rebeca Carvalho, Gabriela Campos e apoio da <a href='http://cepesp.io/quem-somos/pesquisadores/'> equipe CEPESP </a>. </font>")
     HTML(note)
   })
   
