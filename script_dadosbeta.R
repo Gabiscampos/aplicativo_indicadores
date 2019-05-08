@@ -482,17 +482,23 @@ vags_est <- vags_est %>%
                 "Sigla do partido" = "SIGLA_PARTIDO", "Votos válidos do partido" = "VOT_PART_UF", "Quociente eleitoral" = "QUOCIENTE_ELEITORAL",
                 "Quociente partidário" = "QUOCIENTE_PARTIDARIO") 
 
+objects<-list(dec_=dec_, 
+              dec1=dec1, 
+              dec2=dec2, 
+              df=df,
+              dfc=dfc,
+              dfc_=dfc_, 
+              dfc1=dfc1, 
+              dfc2=dfc2,
+              frag_partdf, 
+              num_de=num_de,
+              num_df=num_df,
+              num_df1=num_df1,
+              numc_de=numc_de, 
+              numc_df=numc_df,
+              frag_partdf=frag_partdf,
+              vags_est=vags_est,
+              vags_fed=vags_fed) 
 
-#f <- vags_fed %>% 
-  #filter(UF == "AC") %>% 
-  #ggplot2::ggplot(aes(x = UF, y = `Quociente eleitoral`)) +
-  #geom_bar(stat="identity", fill="#023858", colour = "#023858") +
-  #facet_wrap(~ `Ano da eleição`) +
-  #theme(panel.spacing.y =  unit(4, "mm"), 
-        #axis.text.y = element_text(angle = 360, hjust = 1, vjust = 1))
-   
 
-#print(f)
-
-#?theme
-
+mapply(write_rds, objects, path=paste0("data/",names(objects), '.rds'))
