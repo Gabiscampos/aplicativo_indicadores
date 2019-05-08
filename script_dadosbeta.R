@@ -500,5 +500,4 @@ objects<-list(dec_=dec_,
               vags_est=vags_est,
               vags_fed=vags_fed) 
 
-
-mapply(write_rds, objects, path=paste0("data/",names(objects), '.rds'))
+mapply(write.csv, objects, file=paste0("data/",names(objects), ".csv"), fileEncoding="UTF-8")

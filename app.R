@@ -33,7 +33,8 @@ library(DT)
 #source("script_dadosbeta.R", encoding = "UTF-8", local = TRUE)
 files<-list.files(file.path(getwd(),"data"))
 for(i in files){
-  df<-readRDS(file.path(getwd(),"data",i))
+  df<-read.csv(file.path(getwd(),"data",i), encoding = "UTF-8", check.names = FALSE)
+  df<-df[,2:length(df)]
   assign(paste(substr(i,1,nchar(i)-4)), df)
   
 }
