@@ -444,11 +444,19 @@ alien4 <- get_elections(year = "1998, 2002, 2006, 2010, 2014, 2018", position = 
 alien5 <- get_elections(year = "1998, 2002, 2006, 2010, 2014, 2018", position = "Deputado Estadual",
                         regional_aggregation = "Brasil", political_aggregation = "Consolidado")
 
-alienacao_br<-rbind(alien1, alien2, alien3)
-rm(alien1, alien2, alien3)
+alienacao_br<-rbind(alien1, alien2, alien3, alien4, alien5)
+rm(alien1, alien2, alien3, alien4, alien5)
+
+
+alienacao_br$DESCRICAO_CARGO<-ifelse(alienacao_br$DESCRICAO_CARGO=="DEPUTADO DISTRITAL", "Deputado Estadual", alienacao_br$DESCRICAO_CARGO)
 
 alienacao_br <- alienacao_br %>% 
   dplyr::select(ANO_ELEICAO, NUM_TURNO, DESCRICAO_CARGO, QTD_ABSTENCOES, QT_VOTOS_BRANCOS, QT_VOTOS_NULOS, QTD_APTOS) %>% 
+  group_by(ANO_ELEICAO,NUM_TURNO, DESCRICAO_CARGO) %>% 
+  summarise(QTD_ABSTENCOES = sum(QTD_ABSTENCOES),
+            QT_VOTOS_BRANCOS = sum(QT_VOTOS_BRANCOS),
+            QT_VOTOS_NULOS = sum(QT_VOTOS_NULOS), 
+            QTD_APTOS = sum(QTD_APTOS)) %>% 
   dplyr::rename("Ano da eleição" = "ANO_ELEICAO", "Turno"="NUM_TURNO",
                 "Cargo" = "DESCRICAO_CARGO", "Quantidade de abstenções" = "QTD_ABSTENCOES",
                 "Quantidade de votos brancos" = "QT_VOTOS_BRANCOS", "Quantidade de votos nulos" = "QT_VOTOS_NULOS", 
@@ -475,11 +483,18 @@ alien4 <- get_elections(year = "1998, 2002, 2006, 2010, 2014, 2018", position = 
 alien5 <- get_elections(year = "1998, 2002, 2006, 2010, 2014, 2018", position = "Deputado Estadual",
                         regional_aggregation = "State", political_aggregation = "Consolidado")
 
-alienacao_uf<-rbind(alien1, alien2, alien3)
-rm(alien1, alien2, alien3)
+alienacao_uf<-rbind(alien1, alien2, alien3, alien4, alien5) %>% filter(UF!="ZZ")
+rm(alien1, alien2, alien3, alien4, alien5)
+
+alienacao_uf$DESCRICAO_CARGO<-ifelse(alienacao_uf$DESCRICAO_CARGO=="DEPUTADO DISTRITAL", "Deputado Estadual", alienacao_uf$DESCRICAO_CARGO)
 
 alienacao_uf <- alienacao_uf %>% 
   dplyr::select(ANO_ELEICAO,UF, NUM_TURNO, DESCRICAO_CARGO, QTD_ABSTENCOES, QT_VOTOS_BRANCOS, QT_VOTOS_NULOS, QTD_APTOS) %>% 
+  group_by(ANO_ELEICAO,UF, NUM_TURNO, DESCRICAO_CARGO) %>% 
+  summarise(QTD_ABSTENCOES = sum(QTD_ABSTENCOES),
+            QT_VOTOS_BRANCOS = sum(QT_VOTOS_BRANCOS),
+            QT_VOTOS_NULOS = sum(QT_VOTOS_NULOS), 
+            QTD_APTOS = sum(QTD_APTOS)) %>% 
   dplyr::rename("Ano da eleição" = "ANO_ELEICAO", "Turno"="NUM_TURNO",
                 "Cargo" = "DESCRICAO_CARGO", "Quantidade de abstenções" = "QTD_ABSTENCOES",
                 "Quantidade de votos brancos" = "QT_VOTOS_BRANCOS", "Quantidade de votos nulos" = "QT_VOTOS_NULOS", 
@@ -527,6 +542,7 @@ dfc$`Alienação Absoluta` <- gabi(dfc$`Alienação Absoluta`)
 dfc2$`Alienação Absoluta` <- gabi(dfc2$`Alienação Absoluta`)
 
 alienacao_uf$`Alienação Absoluta` <- gabi(alienacao_uf$`Alienação Absoluta`)
+alienacao_br$`Alienação Absoluta` <- gabi(alienacao_br$`Alienação Absoluta`)
 
 # Deputado Federal
 
@@ -569,3 +585,5 @@ objects<-list(dec=dec,
               alienacao_uf=alienacao_uf) 
 
 mapply(write.csv, objects, file=paste0("data/",names(objects), ".csv"), fileEncoding="UTF-8")
+
+
