@@ -432,6 +432,69 @@ dec$Cargo <- str_to_title(dec$Cargo)
 dec <- dec %>% 
   arrange(`Ano da eleição`)
 
+# OUTROS CARGOS - BR
+alien1 <- get_elections(year = "2002,2006,2010,2014,2018", position = "Presidente",
+                        regional_aggregation = "Brasil", political_aggregation = "Consolidado")
+alien2 <- get_elections(year = "1998, 2002, 2006, 2010, 2014, 2018", position = "Governador",
+                        regional_aggregation = "Brasil", political_aggregation = "Consolidado")
+alien3 <- get_elections(year = "1998, 2002, 2006, 2010, 2014, 2018", position = "Senador",
+                        regional_aggregation = "Brasil", political_aggregation = "Consolidado")
+alien4 <- get_elections(year = "1998, 2002, 2006, 2010, 2014, 2018", position = "Deputado Federal",
+                        regional_aggregation = "Brasil", political_aggregation = "Consolidado")
+alien5 <- get_elections(year = "1998, 2002, 2006, 2010, 2014, 2018", position = "Deputado Estadual",
+                        regional_aggregation = "Brasil", political_aggregation = "Consolidado")
+
+alienacao_br<-rbind(alien1, alien2, alien3)
+rm(alien1, alien2, alien3)
+
+alienacao_br <- alienacao_br %>% 
+  dplyr::select(ANO_ELEICAO, NUM_TURNO, DESCRICAO_CARGO, QTD_ABSTENCOES, QT_VOTOS_BRANCOS, QT_VOTOS_NULOS, QTD_APTOS) %>% 
+  dplyr::rename("Ano da eleição" = "ANO_ELEICAO", "Turno"="NUM_TURNO",
+                "Cargo" = "DESCRICAO_CARGO", "Quantidade de abstenções" = "QTD_ABSTENCOES",
+                "Quantidade de votos brancos" = "QT_VOTOS_BRANCOS", "Quantidade de votos nulos" = "QT_VOTOS_NULOS", 
+                "Quantidade de eleitores aptos"="QTD_APTOS")
+
+alienacao_br$`Alienação Absoluta` <- alienacao_br$`Quantidade de abstenções` + alienacao_br$`Quantidade de votos brancos` + alienacao_br$`Quantidade de votos nulos`
+alienacao_br$`Alienação Percentual` <- round(100*(alienacao_br$`Quantidade de abstenções` + alienacao_br$`Quantidade de votos brancos` + alienacao_br$`Quantidade de votos nulos`)/alienacao_br$`Quantidade de eleitores aptos`,2)
+
+
+alienacao_br$Cargo <- str_to_title(alienacao_br$Cargo)
+
+alienacao_br <- alienacao_br %>% 
+  arrange(`Ano da eleição`)
+
+# OUTROS CARGOS - UF
+alien1 <- get_elections(year = "2002,2006,2010,2014,2018", position = "Presidente",
+                      regional_aggregation = "State", political_aggregation = "Consolidado")
+alien2 <- get_elections(year = "1998, 2002, 2006, 2010, 2014, 2018", position = "Governador",
+                    regional_aggregation = "State", political_aggregation = "Consolidado")
+alien3 <- get_elections(year = "1998, 2002, 2006, 2010, 2014, 2018", position = "Senador",
+                    regional_aggregation = "State", political_aggregation = "Consolidado")
+alien4 <- get_elections(year = "1998, 2002, 2006, 2010, 2014, 2018", position = "Deputado Federal",
+                        regional_aggregation = "State", political_aggregation = "Consolidado")
+alien5 <- get_elections(year = "1998, 2002, 2006, 2010, 2014, 2018", position = "Deputado Estadual",
+                        regional_aggregation = "State", political_aggregation = "Consolidado")
+
+alienacao_uf<-rbind(alien1, alien2, alien3)
+rm(alien1, alien2, alien3)
+
+alienacao_uf <- alienacao_uf %>% 
+  dplyr::select(ANO_ELEICAO,UF, NUM_TURNO, DESCRICAO_CARGO, QTD_ABSTENCOES, QT_VOTOS_BRANCOS, QT_VOTOS_NULOS, QTD_APTOS) %>% 
+  dplyr::rename("Ano da eleição" = "ANO_ELEICAO", "Turno"="NUM_TURNO",
+                "Cargo" = "DESCRICAO_CARGO", "Quantidade de abstenções" = "QTD_ABSTENCOES",
+                "Quantidade de votos brancos" = "QT_VOTOS_BRANCOS", "Quantidade de votos nulos" = "QT_VOTOS_NULOS", 
+                "Quantidade de eleitores aptos"="QTD_APTOS")
+
+alienacao_uf$`Alienação Absoluta` <- alienacao_uf$`Quantidade de abstenções` + alienacao_uf$`Quantidade de votos brancos` + alienacao_uf$`Quantidade de votos nulos`
+alienacao_uf$`Alienação Percentual` <- round(100*(alienacao_uf$`Quantidade de abstenções` + alienacao_uf$`Quantidade de votos brancos` + alienacao_uf$`Quantidade de votos nulos`)/alienacao_uf$`Quantidade de eleitores aptos`,2)
+
+
+alienacao_uf$Cargo <- str_to_title(alienacao_uf$Cargo)
+
+alienacao_uf <- alienacao_uf %>% 
+  arrange(`Ano da eleição`)
+
+
 # 5. Tabelas --------------------------------------------------------------
 
 # 5.1. Quociente eleitoral ------------------------------------------------
@@ -463,6 +526,8 @@ dfc$`Alienação Absoluta` <- gabi(dfc$`Alienação Absoluta`)
 
 dfc2$`Alienação Absoluta` <- gabi(dfc2$`Alienação Absoluta`)
 
+alienacao_uf$`Alienação Absoluta` <- gabi(alienacao_uf$`Alienação Absoluta`)
+
 # Deputado Federal
 
 vags_fed <- vags_fed %>% 
@@ -482,7 +547,8 @@ vags_est <- vags_est %>%
                 "Sigla do partido" = "SIGLA_PARTIDO", "Votos válidos do partido" = "VOT_PART_UF", "Quociente eleitoral" = "QUOCIENTE_ELEITORAL",
                 "Quociente partidário" = "QUOCIENTE_PARTIDARIO") 
 
-objects<-list(dec_=dec_, 
+objects<-list(dec=dec,
+              dec_=dec_, 
               dec1=dec1, 
               dec2=dec2, 
               df=df,
@@ -498,6 +564,8 @@ objects<-list(dec_=dec_,
               numc_df=numc_df,
               frag_partdf=frag_partdf,
               vags_est=vags_est,
-              vags_fed=vags_fed) 
+              vags_fed=vags_fed,
+              alienacao_br=alienacao_br,
+              alienacao_uf=alienacao_uf) 
 
 mapply(write.csv, objects, file=paste0("data/",names(objects), ".csv"), fileEncoding="UTF-8")
